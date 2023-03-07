@@ -14,12 +14,11 @@ let board= [
   [0, 0, 0, 0, 0, 0]   // column 6
 ];
 
-renderBoard();
+init();
 
 const playerButtonELs = document.querySelectorAll('.player-button');
 playerButtonELs.forEach((button, index) => {
   button.addEventListener('click', function() {
-    console.log('Event listener is working');
     addPlayerPiece(index + 1);
   })
 })
@@ -29,9 +28,25 @@ computerButtonEl.addEventListener('click', function() {
   addComputerPiece(getRandomNumber());
 })
 
+// init()
+function init(){
+  winner = null;
+  board = [
+    [0, 0, 0, 0, 0, 0],  // column 0
+    [0, 0, 0, 0, 0, 0],  // column 1
+    [0, 0, 0, 0, 0, 0],  // column 2
+    [0, 0, 0, 0, 0, 0],  // column 3
+    [0, 0, 0, 0, 0, 0],  // column 4
+    [0, 0, 0, 0, 0, 0],  // column 5
+    [0, 0, 0, 0, 0, 0]   // column 6
+  ];
+  renderPlayerButtons();
+  renderBoard();
+  renderComputerButton();
+}
 
-// Initial set up of board
-function renderBoard() {
+// render buttons
+function renderPlayerButtons() {
   const playerButtonContainer = document.createElement('div');
   playerButtonContainer.id = 'player-buttons';
   document.querySelector('body').appendChild(playerButtonContainer);
@@ -42,6 +57,21 @@ function renderBoard() {
     buttonEL.textContent = `Column ${i}`;
     playerButtonContainer.appendChild(buttonEL);
   }
+
+}
+
+function renderComputerButton() {
+  const computerButtonContainer = document.createElement('div');
+  computerButtonContainer.id = 'computer-button-container';
+  document.querySelector('body').appendChild(computerButtonContainer);
+  const computerButton = document.createElement('button');
+  computerButton.textContent = "Computer Turn";
+  computerButton.id = 'computer-button';
+  document.querySelector('#computer-button-container').appendChild(computerButton);
+}
+
+// Initial set up of board
+function renderBoard() {
   const boardContainer = document.createElement('div');
   boardContainer.id = "board-container";
   document.querySelector('body').appendChild(boardContainer);
@@ -56,13 +86,6 @@ function renderBoard() {
       row.appendChild(cell);
     }
   }
-  const computerButtonContainer = document.createElement('div');
-  computerButtonContainer.id = 'computer-button-container';
-  document.querySelector('body').appendChild(computerButtonContainer);
-  const computerButton = document.createElement('button');
-  computerButton.textContent = "Computer Turn";
-  computerButton.id = 'computer-button'
-  document.querySelector('#computer-button-container').appendChild(computerButton);
   }
 
   // Function to add player piece
