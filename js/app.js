@@ -4,28 +4,20 @@ const rows = 6;
 const columns = 7;
 const player = 1;
 const computer = 2;
-let board= [
-  [0, 0, 0, 0, 0, 0],  // column 0
-  [0, 0, 0, 0, 0, 0],  // column 1
-  [0, 0, 0, 0, 0, 0],  // column 2
-  [0, 0, 0, 0, 0, 0],  // column 3
-  [0, 0, 0, 0, 0, 0],  // column 4
-  [0, 0, 0, 0, 0, 0],  // column 5
-  [0, 0, 0, 0, 0, 0]   // column 6
-];
+let board= [[]];
 
 init();
 
 const playerButtonELs = document.querySelectorAll('.player-button');
 playerButtonELs.forEach((button, index) => {
   button.addEventListener('click', function() {
-    addPlayerPiece(index + 1);
+    addPiece(index, player);
   })
 })
 
 const computerButtonEl = document.querySelector('#computer-button');
 computerButtonEl.addEventListener('click', function() {
-  addComputerPiece(getRandomNumber());
+  addPiece(getRandomNumber(), computer);
 })
 
 // init()
@@ -57,7 +49,6 @@ function renderPlayerButtons() {
     buttonEL.textContent = `Column ${i}`;
     playerButtonContainer.appendChild(buttonEL);
   }
-
 }
 
 function renderComputerButton() {
@@ -87,39 +78,32 @@ function renderBoard() {
     }
   }
   }
-
-  // Function to add player piece
-  function addPlayerPiece(column) {
-    const cells = document.querySelectorAll(`#row-${column-1} .cell`);
-    for (let i = cells.length - 1; i >= 0; i--) {
-      const cell = cells[i];
-      if (!cell.classList.contains('filled')) {
-        cell.classList.add('filled');
+function updateBoard() {
+  for(let i = 0; i <= rows; i++) {
+    for(let j = columns -1; j >= 0; j--) {
+      const cell = document.getElementById(`R${i} C${j+1}`);
+      if(board[i][j] === player) {
         cell.classList.add('playerFilled');
-        const row = i; 
-        board[column - 1][row] = player;
-        break;
-      }
-    }
-  }
-
-  // Function to add computer piece
-  function addComputerPiece(column) {
-    const cells = document.querySelectorAll(`#row-${column-1} .cell`);
-    for (let i = cells.length - 1; i >= 0; i--) {
-      const cell = cells[i];
-      if (!cell.classList.contains('filled')) {
-        cell.classList.add('filled');
+      } else if(board[i][j] === computer) {
         cell.classList.add('computerFilled');
-        const row = i; 
-        board[column - 1][row] = computer;
-        break;
       }
     }
   }
+}
+    
 
-  // Function to get random number for computer turn
-  function getRandomNumber() {
-    number = Math.floor(Math.random()*7);
-    return number + 1;
+function addPiece(column, user) {
+  for (let i = board.length; i >= 0; i--) {
+    if (board[column][i] === 0) {
+      board[column][i] = user;
+      break;
+    }
   }
+  updateBoard()
+}
+  
+// Function to get random number for computer turn
+function getRandomNumber() {
+  number = Math.floor(Math.random()*7);
+  return number;
+}
