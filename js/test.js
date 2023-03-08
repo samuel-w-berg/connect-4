@@ -107,17 +107,16 @@ function addPiece(column, user) {
 // Function to get random number for computer turn
 function getRandomNumber() {
   number = Math.floor(Math.random()*7);
-  console.log(number);
   return number;
 }
 
 // win condition
 
 function checkWinner(column, user) {
-    // vertical check
     checkVertical(column, user);          
-    // horizontal check
     checkHorizontal(user);
+    checkPositiveDiagonal(user);
+    checkNegativeDiagonal(user);
 }
 
 function checkVertical(column, user) {
@@ -147,5 +146,34 @@ function checkHorizontal(user) {
       }
     }
     return false;
-  }
-  
+}
+
+//Check for diagonal with a positive slope
+function checkPositiveDiagonal(user) {
+    for (let row = rows - 1; row >= 3; row--) {
+        for (let col = 0; col <= columns - 4; col++) {
+          if (board[col][row] === user &&
+              board[col + 1][row - 1] === user &&
+              board[col + 2][row - 2] === user &&
+              board[col + 3][row - 3] === user) {
+            console.log('We have a winner');
+            return true;
+          }
+        }
+      }
+}
+
+//Check for diagonal with a negative slope
+function checkNegativeDiagonal(user) {
+    for (let row = 0; row <= rows - 4; row++) {
+        for (let col = 0; col <= columns - 4; col++) {
+        if (board[col][row] === user &&
+            board[col + 1][row + 1] === user &&
+            board[col + 2][row + 2] === user &&
+            board[col + 3][row + 3] === user) {
+                console.log('We have a winner');
+                return true;
+        }
+        }
+    }
+}
