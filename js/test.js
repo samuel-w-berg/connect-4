@@ -83,6 +83,17 @@ function renderBoard() {
     }
   }
   }
+
+// render the modal
+function renderModal(){
+    const modalEL = document.createElement('section');
+    modalEL.classList.add("hidden", "modal");
+    document.querySelector('body').appendChild(modalEL);
+    const overlayEL = document.createElement('div');
+    overlayEL.classList.add("hidden", "overlay");
+    document.querySelector('body').appendChild(overlayEL);
+}
+
 // update the view from 2D board Array------------------------------------------------------------------
 function updateView() {
   for(let i = 0; i < columns; i++) {
@@ -106,7 +117,7 @@ function addPiece(column, user) {
     }
   }
   updateView();
-  checkWinner(column, user);
+  checkWinner(user);
 }
   
 // Function to get random number for computer turn---------------------------------------------------
@@ -117,11 +128,11 @@ function getRandomNumber() {
 
 // win condition--------------------------------------------------------------------------------------
 
-function checkWinner(column, user) {
-    if (checkVertical(column, user)){winner = user; return true}          
-    else if (checkHorizontal(user)){winner = user; return true}
-    else if (checkPositiveDiagonal(user)){winner = user; return true}
-    else if (checkNegativeDiagonal(user)){winner = user; return true}
+function checkWinner(user) {
+    if (checkVertical(user)){winner = user; console.log('We have a winner'); return true}          
+    else if (checkHorizontal(user)){winner = user; console.log('We have a winner'); return true}
+    else if (checkPositiveDiagonal(user)){winner = user; console.log('We have a winner'); return true}
+    else if (checkNegativeDiagonal(user)){winner = user; console.log('We have a winner'); return true}
     else return false;
 }
 
@@ -132,7 +143,6 @@ function checkVertical(user) {
             board[col][row+1] === user &&
             board[col][row+2] === user &&
             board[col][row+3] === user) {
-                console.log('We have a winner');
                 return true
             }
         }
@@ -146,7 +156,6 @@ function checkHorizontal(user) {
         if (board[col][row] === user) {
           count++;
           if (count === 4) {
-            console.log('We have a winner');
             return true;
           }
         } else {
@@ -165,7 +174,6 @@ function checkPositiveDiagonal(user) {
               board[col + 1][row - 1] === user &&
               board[col + 2][row - 2] === user &&
               board[col + 3][row - 3] === user) {
-            console.log('We have a winner');
             return true;
           }
         }
@@ -181,7 +189,6 @@ function checkNegativeDiagonal(user) {
             board[col + 1][row + 1] === user &&
             board[col + 2][row + 2] === user &&
             board[col + 3][row + 3] === user) {
-                console.log('We have a winner');
                 return true;
         }
         }
