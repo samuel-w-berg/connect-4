@@ -66,23 +66,23 @@ function renderBoard() {
   const boardContainer = document.createElement('div');
   boardContainer.id = "board-container";
   document.querySelector('body').appendChild(boardContainer);
-  for(let i=0; i <= rows; i++){
-    const row = document.createElement('div');
-    row.id = `row-${i}`
-    boardContainer.appendChild(row);
-    for(let j=1; j<columns; j++) {
+  for(let i=0; i < columns; i++){
+    const column = document.createElement('div');
+    column.id = `column-${i}`
+    boardContainer.appendChild(column);
+    for(let j=0; j<rows; j++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
-      cell.id = `R${i} C${j}`;
-      row.appendChild(cell);
+      cell.id = `C${i} R${j}`;
+      column.appendChild(cell);
     }
   }
   }
 
 function updateView() {
-  for(let i = 0; i <= rows; i++) {
-    for(let j = columns -1; j >= 0; j--) {
-      const cell = document.getElementById(`R${i} C${j+1}`);
+  for(let i = 0; i < columns; i++) {
+    for(let j = rows; j >= 0; j--) {
+      const cell = document.getElementById(`C${i} R${j}`);
       if(board[i][j] === player) {
         cell.classList.add('playerFilled');
       } else if(board[i][j] === computer) {
@@ -94,17 +94,40 @@ function updateView() {
     
 
 function addPiece(column, user) {
-  for (let i = board.length; i >= 0; i--) {
+  for (let i = columns; i >= 0; i--) {
     if (board[column][i] === 0) {
       board[column][i] = user;
       break;
     }
   }
-  updateView()
+  updateView();
+  checkWinner(column, user);
 }
   
 // Function to get random number for computer turn
 function getRandomNumber() {
   number = Math.floor(Math.random()*7);
+  console.log(number);
   return number;
+}
+
+// win condition
+
+function checkWinner(column, user) {
+    // vertical check
+    for (let i = 0; i<columns; i++){
+        if (board[column][i] === user &&
+            board[column][i+1] === user &&
+            board[column][i+2] === user &&
+            board[column][i+3] === user) {
+                console.log('We have a winner');
+            }
+    for (let i=5; i>=0; i--)
+            if (board[column][i] === user &&
+            board[column+1][i] === user &&
+            board[column+2][i] === user &&
+            board[column+3][i] === user) {
+                console.log('We have a winner');
+            }
+    }
 }
