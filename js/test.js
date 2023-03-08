@@ -12,15 +12,18 @@ const playerButtonELs = document.querySelectorAll('.player-button');
 playerButtonELs.forEach((button, index) => {
   button.addEventListener('click', function() {
     addPiece(index, player);
+    setTimeout(addPiece, 750, getRandomNumber(), computer);
   })
 })
 
-const computerButtonEl = document.querySelector('#computer-button');
-computerButtonEl.addEventListener('click', function() {
-  addPiece(getRandomNumber(), computer);
-})
+// Computer button no longer necessary after timeout added to player button, but will leave present
 
-// init()
+// const computerButtonEl = document.querySelector('#computer-button');
+// computerButtonEl.addEventListener('click', function() {
+//   addPiece(getRandomNumber(), computer);
+// })
+
+// init()---------------------------------------------------------------------------------------
 function init(){
   winner = null;
   board = [
@@ -34,10 +37,10 @@ function init(){
   ];
   renderPlayerButtons();
   renderBoard();
-  renderComputerButton();
+  // renderComputerButton();
 }
 
-// render buttons
+// render buttons--------------------------------------------------------------------------------
 function renderPlayerButtons() {
   const playerButtonContainer = document.createElement('div');
   playerButtonContainer.id = 'player-buttons';
@@ -46,22 +49,24 @@ function renderPlayerButtons() {
     const buttonEL = document.createElement('button');
     buttonEL.classList.add('player-button');
     buttonEL.id = `button-${i}`;
-    buttonEL.textContent = `Column ${i}`;
+    buttonEL.textContent = `Place Here`;
     playerButtonContainer.appendChild(buttonEL);
   }
 }
 
-function renderComputerButton() {
-  const computerButtonContainer = document.createElement('div');
-  computerButtonContainer.id = 'computer-button-container';
-  document.querySelector('body').appendChild(computerButtonContainer);
-  const computerButton = document.createElement('button');
-  computerButton.textContent = "Computer Turn";
-  computerButton.id = 'computer-button';
-  document.querySelector('#computer-button-container').appendChild(computerButton);
-}
+// Computer button no longer necessary after timeout added to player button, but will leave present
 
-// Initial set up of board
+// function renderComputerButton() {
+//   const computerButtonContainer = document.createElement('div');
+//   computerButtonContainer.id = 'computer-button-container';
+//   document.querySelector('body').appendChild(computerButtonContainer);
+//   const computerButton = document.createElement('button');
+//   computerButton.textContent = "Computer Turn";
+//   computerButton.id = 'computer-button';
+//   document.querySelector('#computer-button-container').appendChild(computerButton);
+// }
+
+// Initial set up of board----------------------------------------------------------------------
 function renderBoard() {
   const boardContainer = document.createElement('div');
   boardContainer.id = "board-container";
@@ -78,7 +83,7 @@ function renderBoard() {
     }
   }
   }
-
+// update the view from 2D board Array------------------------------------------------------------------
 function updateView() {
   for(let i = 0; i < columns; i++) {
     for(let j = rows; j >= 0; j--) {
@@ -92,7 +97,7 @@ function updateView() {
   }
 }
     
-
+// add piece to 2D board Array----------------------------------------------------------------------------
 function addPiece(column, user) {
   for (let i = columns; i >= 0; i--) {
     if (board[column][i] === 0) {
@@ -104,30 +109,34 @@ function addPiece(column, user) {
   checkWinner(column, user);
 }
   
-// Function to get random number for computer turn
+// Function to get random number for computer turn---------------------------------------------------
 function getRandomNumber() {
   number = Math.floor(Math.random()*7);
   return number;
 }
 
-// win condition
+// win condition--------------------------------------------------------------------------------------
 
 function checkWinner(column, user) {
-    checkVertical(column, user);          
-    checkHorizontal(user);
-    checkPositiveDiagonal(user);
-    checkNegativeDiagonal(user);
+    if (checkVertical(column, user)){winner = user; return true}          
+    else if (checkHorizontal(user)){winner = user; return true}
+    else if (checkPositiveDiagonal(user)){winner = user; return true}
+    else if (checkNegativeDiagonal(user)){winner = user; return true}
+    else return false;
 }
 
-function checkVertical(column, user) {
-    for (let i = 0; i<columns; i++){
-        if (board[column][i] === user &&
-            board[column][i+1] === user &&
-            board[column][i+2] === user &&
-            board[column][i+3] === user) {
+function checkVertical(user) {
+    for (let row = 0; row<rows; row++){
+        for (let col = 0; col<columns; col++)
+        if (board[col][row] === user &&
+            board[col][row+1] === user &&
+            board[col][row+2] === user &&
+            board[col][row+3] === user) {
                 console.log('We have a winner');
+                return true
             }
-        } 
+        }
+        return false; 
 }
 
 function checkHorizontal(user) {
@@ -150,8 +159,8 @@ function checkHorizontal(user) {
 
 //Check for diagonal with a positive slope
 function checkPositiveDiagonal(user) {
-    for (let row = rows - 1; row >= 3; row--) {
-        for (let col = 0; col <= columns - 4; col++) {
+    for (let row = rows - 1; row >= 3; row--) {             //checks rows from the bottom of the board, stopping at row 3 because the board is not tall enough to start any higher
+        for (let col = 0; col <= columns - 4; col++) {      //checks columns from left to right, stopping at column 3 because the board is not wide enough to start any farther
           if (board[col][row] === user &&
               board[col + 1][row - 1] === user &&
               board[col + 2][row - 2] === user &&
@@ -161,12 +170,13 @@ function checkPositiveDiagonal(user) {
           }
         }
       }
+      return false;
 }
 
 //Check for diagonal with a negative slope
 function checkNegativeDiagonal(user) {
-    for (let row = 0; row <= rows - 4; row++) {
-        for (let col = 0; col <= columns - 4; col++) {
+    for (let row = 0; row <= rows - 4; row++) {             //checks rows from the top of the board, stopping at row 2 because the board is not tall enough to start any lower
+        for (let col = 0; col <= columns - 4; col++) {      //checks columns from left to right, stopping at column 3 because the board is not wide enough to start any farther
         if (board[col][row] === user &&
             board[col + 1][row + 1] === user &&
             board[col + 2][row + 2] === user &&
@@ -176,4 +186,6 @@ function checkNegativeDiagonal(user) {
         }
         }
     }
+    return false;
 }
+
