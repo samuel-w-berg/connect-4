@@ -68,7 +68,7 @@ function renderBoard() {
   document.querySelector('body').appendChild(boardContainer);
   for(let i=0; i < columns; i++){
     const column = document.createElement('div');
-    column.id = `column-${i}`
+    column.id = `column-${i}`;
     boardContainer.appendChild(column);
     for(let j=0; j<rows; j++) {
       const cell = document.createElement('div');
@@ -115,6 +115,12 @@ function getRandomNumber() {
 
 function checkWinner(column, user) {
     // vertical check
+    checkVertical(column, user);          
+    // horizontal check
+    checkHorizontal(user);
+}
+
+function checkVertical(column, user) {
     for (let i = 0; i<columns; i++){
         if (board[column][i] === user &&
             board[column][i+1] === user &&
@@ -122,12 +128,24 @@ function checkWinner(column, user) {
             board[column][i+3] === user) {
                 console.log('We have a winner');
             }
-    for (let i=5; i>=0; i--)
-            if (board[column][i] === user &&
-            board[column+1][i] === user &&
-            board[column+2][i] === user &&
-            board[column+3][i] === user) {
-                console.log('We have a winner');
-            }
-    }
+        } 
 }
+
+function checkHorizontal(user) {
+    for (let row = 0; row < rows; row++) {
+      let count = 0;
+      for (let col = 0; col < columns; col++) {
+        if (board[col][row] === user) {
+          count++;
+          if (count === 4) {
+            console.log('We have a winner');
+            return true;
+          }
+        } else {
+          count = 0;
+        }
+      }
+    }
+    return false;
+  }
+  
