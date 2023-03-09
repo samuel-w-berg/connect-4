@@ -80,6 +80,7 @@ function renderBoard() {
     for(let j=0; j<rows; j++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
+      cell.classList.add('empty');
       cell.id = `C${i} R${j}`;
       column.appendChild(cell);
     }
@@ -108,26 +109,33 @@ function renderModal(winner){
     })
 }
 
-function restartGame(){
-    winner = null;
-    board = [
-        [0, 0, 0, 0, 0, 0],  // column 0
-        [0, 0, 0, 0, 0, 0],  // column 1
-        [0, 0, 0, 0, 0, 0],  // column 2
-        [0, 0, 0, 0, 0, 0],  // column 3
-        [0, 0, 0, 0, 0, 0],  // column 4
-        [0, 0, 0, 0, 0, 0],  // column 5
-        [0, 0, 0, 0, 0, 0]   // column 6
-    ];
-    updateView();
-    toggleModal();
+// Temporary solution to restartGame -----------------------------------------------------------------
+function restartGame() {
+    window.location.reload();
 }
 
-function toggleModal () {
-    if (!winner){
-        document.querySelector(".modal").classList.add("hidden")          
-    } else {modalEL.classList.remove("hidden")}
-}
+//Potential solution to restart game, going with simple refresh for now ----------------------------------
+
+// function restartGame(){
+//     winner = null;
+//     board = [
+//         [0, 0, 0, 0, 0, 0],  // column 0
+//         [0, 0, 0, 0, 0, 0],  // column 1
+//         [0, 0, 0, 0, 0, 0],  // column 2
+//         [0, 0, 0, 0, 0, 0],  // column 3
+//         [0, 0, 0, 0, 0, 0],  // column 4
+//         [0, 0, 0, 0, 0, 0],  // column 5
+//         [0, 0, 0, 0, 0, 0]   // column 6
+//     ];
+//     updateView();
+//     toggleModal();
+// }
+
+// function toggleModal () {
+//     if (!winner){
+//         document.querySelector(".modal").classList.add("hidden")          
+//     } else {modalEL.classList.remove("hidden")}
+// }
 
 // update the view from 2D board Array------------------------------------------------------------------
 function updateView() {
@@ -135,9 +143,9 @@ function updateView() {
     for(let j = rows; j >= 0; j--) {
       const cell = document.getElementById(`C${i} R${j}`);
       if(board[i][j] === player) {
-        cell.classList.add('playerFilled');
+        cell.classList.replace('empty', 'playerFilled');
       } else if(board[i][j] === computer) {
-        cell.classList.add('computerFilled');
+        cell.classList.replace('empty', 'computerFilled');
       }
       }
     }
