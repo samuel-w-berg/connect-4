@@ -1,5 +1,3 @@
-console.log('JS test branch main');
-
 // State
 let winner;
 const rows = 6;
@@ -39,10 +37,25 @@ function init(){
     [0, 0, 0, 0, 0, 0],  // column 5
     [0, 0, 0, 0, 0, 0]   // column 6
   ];
+  renderGameTitle();
   renderPlayerButtons();
   renderBoard();
   // renderComputerButton();
 }
+
+// render game title
+function renderGameTitle() {
+    const gameTitleContainerEL = document.createElement('div');
+    const gameTitleEL = document.createElement('h1');
+    const gameRulesEL = document.createElement('h4');
+    gameTitleContainerEL.id = "title-container";
+    gameTitleEL.textContent = "Connect Four";
+    gameRulesEL.textContent = "Place your piece in any column, the computer will play next. Connect four to win!";
+    document.querySelector('body').appendChild(gameTitleContainerEL);
+    gameTitleContainerEL.appendChild(gameTitleEL);
+    gameTitleContainerEL.appendChild(gameRulesEL);
+}
+
 
 // render buttons--------------------------------------------------------------------------------
 function renderPlayerButtons() {
@@ -172,7 +185,14 @@ function addPiece(column, user) {
 // Function to get random number for computer turn---------------------------------------------------
 function getRandomNumber() {
   number = Math.floor(Math.random()*7);
+  if (board[number].includes(0)){
+    return number;
+  }
+  while (!board[number].includes(0)){
+    number = Math.floor(Math.random()*7);
+  } 
   return number;
+  
 }
 
 // win condition--------------------------------------------------------------------------------------
