@@ -1,3 +1,5 @@
+console.log('JS test branch main');
+
 // State
 let winner;
 const rows = 6;
