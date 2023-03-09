@@ -16,6 +16,8 @@ playerButtonELs.forEach((button, index) => {
   })
 })
 
+
+
 // Computer button no longer necessary after timeout added to player button, but will leave present
 
 // const computerButtonEl = document.querySelector('#computer-button');
@@ -85,13 +87,46 @@ function renderBoard() {
   }
 
 // render the modal
-function renderModal(){
-    const modalEL = document.createElement('section');
-    modalEL.classList.add("hidden", "modal");
+function renderModal(winner){
+    const modalEL = document.createElement('div');
+    modalEL.classList.add("modal");
     document.querySelector('body').appendChild(modalEL);
-    const overlayEL = document.createElement('div');
-    overlayEL.classList.add("hidden", "overlay");
-    document.querySelector('body').appendChild(overlayEL);
+    const winnerMessageEL = document.createElement('h1');
+    winnerMessageEL.id = "winner-message";
+    if (winner===1){
+        winnerMessageEL.textContent = "The player wins!"
+    } else if (winner === computer) {
+        winnerMessageEL.textContent = "The computer wins!"
+    }
+    modalEL.appendChild(winnerMessageEL);
+    const restartButtonEL = document.createElement('button');
+    restartButtonEL.textContent = "Play Again?";
+    restartButtonEL.id = "restart-button";
+    modalEL.appendChild(restartButtonEL);
+    restartButtonEL.addEventListener('click', function() {
+        restartGame();
+    })
+}
+
+function restartGame(){
+    winner = null;
+    board = [
+        [0, 0, 0, 0, 0, 0],  // column 0
+        [0, 0, 0, 0, 0, 0],  // column 1
+        [0, 0, 0, 0, 0, 0],  // column 2
+        [0, 0, 0, 0, 0, 0],  // column 3
+        [0, 0, 0, 0, 0, 0],  // column 4
+        [0, 0, 0, 0, 0, 0],  // column 5
+        [0, 0, 0, 0, 0, 0]   // column 6
+    ];
+    updateView();
+    toggleModal();
+}
+
+function toggleModal () {
+    if (!winner){
+        document.querySelector(".modal").classList.add("hidden")          
+    } else {modalEL.classList.remove("hidden")}
 }
 
 // update the view from 2D board Array------------------------------------------------------------------
@@ -104,9 +139,10 @@ function updateView() {
       } else if(board[i][j] === computer) {
         cell.classList.add('computerFilled');
       }
+      }
     }
   }
-}
+
     
 // add piece to 2D board Array----------------------------------------------------------------------------
 function addPiece(column, user) {
@@ -117,7 +153,10 @@ function addPiece(column, user) {
     }
   }
   updateView();
-  checkWinner(user);
+  if(checkWinner(user)) {
+    renderModal(winner)
+  }
+  
 }
   
 // Function to get random number for computer turn---------------------------------------------------
